@@ -1,0 +1,67 @@
+blueprint:
+  name: Timer with Notification
+  description: A timer sending notifications when it finishes.
+  domain: automation
+  input:
+    timer_name:
+      name: Timer Name
+      description: The name of the timer
+      default: My Timer
+      selector:
+        text:
+    notify_service:
+      name: Notify Service
+      description: The notify service to use for sending notifications
+      selector:
+        entity:
+          domain: notify
+    default_message:
+      name: Default Message
+      description: The default message to send when the timer finishes
+      default: "The timer has finished."
+      selector:
+        text:
+    timer_entity:
+      name: Timer Entity
+      description: The timer entity to use
+      selector:
+        entity:
+          domain: timer
+    timer_duration:
+      name: Timer Duration Helper
+      description: Input datetime helper for setting the timer duration
+      selector:
+        entity:
+          domain: input_datetime
+    timer_message:
+      name: Timer Message
+      description: Input text helper for custom timer messages
+      selector:
+        entity:
+          domain: input_text
+
+variables:
+  timer_name: !input timer_name
+  notify_service: !input notify_service
+  default_message: !input default_message
+  timer_entity: !input timer_entity
+  timer_duration: !input timer_duration
+  timer_message: !input timer_message
+
+trigger:
+  - platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: !input timer_entity
+
+condition: []
+
+action:
+  - service: notify.{{ notify_service }}
+    data:
+      title: "{{ timer_name }} Finished"
+      message: "{{ state_attr('input_text.timer_message', default=default_message) }}"
+      data:
+        timestamp: "{{ now().timestamp() }}"
+
+mode: single

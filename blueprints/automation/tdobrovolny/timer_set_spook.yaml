@@ -1,0 +1,37 @@
+blueprint:
+  name: Timer set duration from datetime helper with Spook
+  description: Set a timer duration with Spook integratino
+  domain: automation
+  input:
+    timer_entity:
+      name: Timer Entity
+      description: The timer entity to use
+      selector:
+        entity:
+          domain: timer
+    timer_duration:
+      name: Timer Duration Helper
+      description: Input datetime helper for setting the timer duration
+      selector:
+        entity:
+          domain: input_datetime
+
+variables:
+  timer_entity: !input timer_entity
+  timer_duration: !input timer_duration
+
+trigger:
+  - platform: state
+    entity_id: !input timer_duration
+    for:
+      seconds: 5
+
+condition: []
+
+action:
+  - service: timer.set_duration
+    data:
+      entity_id: !input timer_entity
+      duration: !input timer_duration
+
+mode: single
