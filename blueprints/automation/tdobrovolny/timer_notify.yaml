@@ -57,7 +57,7 @@ triggers:
 condition: []
 
 action:
-  - service: notify.{{ notify_service }}
+  - action: notify.{{ notify_service }}
     data:
       title: "{{ timer_name }} Finished"
       message: "{{ state_attr('input_text.timer_message', default=default_message) }}"

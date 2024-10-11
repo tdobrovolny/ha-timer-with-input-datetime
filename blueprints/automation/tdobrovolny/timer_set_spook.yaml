@@ -29,7 +29,7 @@ triggers:
 condition: []
 
 action:
-  - service: timer.set_duration
+  - action: timer.set_duration
     data:
       entity_id: !input timer_entity
       duration: !input timer_duration
