@@ -20,8 +20,8 @@ variables:
   timer_entity: !input timer_entity
   timer_duration: !input timer_duration
 
-trigger:
-  - platform: state
+triggers:
+  - trigger: state
     entity_id: !input timer_duration
     for:
       seconds: 5
